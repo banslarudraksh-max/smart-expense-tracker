@@ -102,28 +102,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </nav>
 
-      {/* Supabase backend summary card */}
-      <div className="px-4 py-3 border-t border-slate-800/80 bg-slate-950/40">
-        <button
-          onClick={onOpenSupabaseSetup}
-          className="w-full text-left p-3 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-colors group"
-        >
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[11px] font-mono font-medium text-slate-400 group-hover:text-cyan-400 flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5 text-cyan-400" />
-              Supabase RLS
-            </span>
-            <span className="text-[10px] text-emerald-400 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              Active
-            </span>
-          </div>
-          <p className="text-[10px] text-slate-500 leading-tight">
-            auth.uid() scoped queries · PostgreSQL tables
-          </p>
-        </button>
-      </div>
-
       {/* User profile & Logout */}
       <div className="p-3 border-t border-slate-800 flex items-center justify-between bg-slate-950">
         <div className="flex items-center gap-2.5 min-w-0">
