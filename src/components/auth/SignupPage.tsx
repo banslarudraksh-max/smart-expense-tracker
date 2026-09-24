@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Database, Lock, Mail, User, AlertCircle, ArrowRight, CheckCircle2, Check } from 'lucide-react';
+import { Lock, Mail, User, AlertCircle, ArrowRight, CheckCircle2, Check } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 interface SignupPageProps {
@@ -262,7 +262,7 @@ export const SignupPage: React.FC<SignupPageProps> = ({
           </form>
 
           {/* Quick links */}
-          <div className="pt-2 text-center text-xs text-slate-400 space-y-2">
+          <div className="pt-4 text-center text-xs text-slate-400 space-y-2">
             <div>
               Already have an account?{' '}
               <button
@@ -271,16 +271,6 @@ export const SignupPage: React.FC<SignupPageProps> = ({
                 className="text-cyan-400 font-medium hover:underline"
               >
                 Sign in
-              </button>
-            </div>
-            <div>
-              <button
-                type="button"
-                onClick={onOpenSupabaseSetup}
-                className="text-slate-500 hover:text-slate-300 underline inline-flex items-center gap-1 text-[11px]"
-              >
-                <Database className="w-3 h-3" />
-                <span>Configure Supabase Project Credentials</span>
               </button>
             </div>
             {onNavigateToLanding && (

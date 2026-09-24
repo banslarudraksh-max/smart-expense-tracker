@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Database, Lock, Mail, AlertCircle, ArrowRight, Sparkles, KeyRound } from 'lucide-react';
+import { Lock, Mail, AlertCircle, ArrowRight, KeyRound } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 interface LoginPageProps {
@@ -144,27 +144,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             </button>
           </form>
 
-          {/* Alternative Demo Sandbox Option */}
-          <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-800" />
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-slate-900 px-2 text-slate-500">or instant preview</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={enterDemoMode}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-950 border border-slate-700 hover:border-slate-600 text-slate-200 font-semibold text-xs transition-colors flex items-center justify-center gap-2"
-          >
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span>Launch Demo Sandbox (No login needed)</span>
-          </button>
-
           {/* Bottom helper */}
-          <div className="pt-2 text-center text-xs text-slate-400 flex flex-col gap-2">
+          <div className="pt-4 text-center text-xs text-slate-400 flex flex-col gap-2">
             <div>
               Don&apos;t have an account?{' '}
               <button
@@ -173,16 +154,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 className="text-cyan-400 font-medium hover:underline"
               >
                 Sign up
-              </button>
-            </div>
-            <div>
-              <button
-                type="button"
-                onClick={onOpenSupabaseSetup}
-                className="text-slate-500 hover:text-slate-300 underline inline-flex items-center gap-1 text-[11px]"
-              >
-                <Database className="w-3 h-3" />
-                <span>Configure Supabase Project Credentials</span>
               </button>
             </div>
             {onNavigateToLanding && (
