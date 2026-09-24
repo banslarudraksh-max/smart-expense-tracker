@@ -163,6 +163,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { error: new Error('Supabase is not configured. Please enter your Supabase URL & Anon Key.'), user: null };
     }
 
+    const hasMinLength = password.length >= 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
+
+    if (!hasMinLength || !hasUppercase || !hasNumber || !hasSpecialChar) {
+      return {
+        error: new Error(
+          'Password does not meet requirements (must be at least 8 characters long, contain at least 1 uppercase letter, 1 number, and 1 special character).'
+        ),
+        user: null,
+      };
+    }
+
     try {
       const { data, error } = await supabase.auth.signUp({
         email: email.trim(),

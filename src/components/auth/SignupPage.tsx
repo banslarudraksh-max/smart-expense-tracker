@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Database, Lock, Mail, User, AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Database, Lock, Mail, User, AlertCircle, ArrowRight, CheckCircle2, Check } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 interface SignupPageProps {
@@ -25,6 +25,52 @@ export const SignupPage: React.FC<SignupPageProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+  // Live password rules validation
+  const hasMinLength = password.length >= 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
+
+  const passwordRules = [
+    { id: 'length', label: 'At least 8 characters', met: hasMinLength },
+    { id: 'uppercase', label: 'One uppercase letter', met: hasUppercase },
+    { id: 'number', label: 'One number', met: hasNumber },
+    { id: 'special', label: 'One special character', met: hasSpecialChar },
+  ];
+
+  const metRulesCount = passwordRules.filter((r) => r.met).length;
+
+  const getStrengthInfo = () => {
+    if (!password) {
+      return {
+        label: '',
+        textColor: 'text-slate-500',
+        bars: ['bg-slate-800', 'bg-slate-800', 'bg-slate-800'],
+      };
+    }
+    if (metRulesCount <= 2) {
+      return {
+        label: 'Weak',
+        textColor: 'text-rose-400',
+        bars: ['bg-rose-500', 'bg-slate-800', 'bg-slate-800'],
+      };
+    }
+    if (metRulesCount === 3) {
+      return {
+        label: 'Medium',
+        textColor: 'text-amber-400',
+        bars: ['bg-amber-400', 'bg-amber-400', 'bg-slate-800'],
+      };
+    }
+    return {
+      label: 'Strong',
+      textColor: 'text-emerald-400',
+      bars: ['bg-emerald-400', 'bg-emerald-400', 'bg-emerald-400'],
+    };
+  };
+
+  const strengthInfo = getStrengthInfo();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -40,8 +86,14 @@ export const SignupPage: React.FC<SignupPageProps> = ({
       return;
     }
 
-    if (password.length < 6) {
-      setErrorMsg('Password should be at least 6 characters long.');
+    const missingRules: string[] = [];
+    if (!hasMinLength) missingRules.push('at least 8 characters');
+    if (!hasUppercase) missingRules.push('one uppercase letter');
+    if (!hasNumber) missingRules.push('one number');
+    if (!hasSpecialChar) missingRules.push('one special character');
+
+    if (missingRules.length > 0) {
+      setErrorMsg(`Password does not meet requirements: missing ${missingRules.join(', ')}.`);
       return;
     }
 
@@ -144,6 +196,43 @@ export const SignupPage: React.FC<SignupPageProps> = ({
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-9 pr-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-cyan-500"
                 />
+              </div>
+
+              {/* Password strength & live requirements */}
+              <div className="mt-2.5 p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2.5">
+                {/* Live strength meter */}
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-slate-400">Password Strength:</span>
+                  <span className={`font-semibold ${strengthInfo.textColor}`}>
+                    {strengthInfo.label || '—'}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-1.5 h-1.5 w-full">
+                  <div className={`h-full rounded-full transition-colors duration-200 ${strengthInfo.bars[0]}`} />
+                  <div className={`h-full rounded-full transition-colors duration-200 ${strengthInfo.bars[1]}`} />
+                  <div className={`h-full rounded-full transition-colors duration-200 ${strengthInfo.bars[2]}`} />
+                </div>
+
+                {/* Requirements checklist */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1 text-[11px]">
+                  {passwordRules.map((rule) => (
+                    <div
+                      key={rule.id}
+                      className={`flex items-center gap-1.5 transition-colors ${
+                        rule.met ? 'text-emerald-400 font-medium' : 'text-slate-400'
+                      }`}
+                    >
+                      {rule.met ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" strokeWidth={2.5} />
+                      ) : (
+                        <div className="w-3.5 h-3.5 rounded-full border border-slate-600/80 flex items-center justify-center shrink-0">
+                          <div className="w-1 h-1 rounded-full bg-slate-600" />
+                        </div>
+                      )}
+                      <span>{rule.label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
